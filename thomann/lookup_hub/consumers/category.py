@@ -13,6 +13,11 @@ LOGGER = logging.getLogger(__name__)
 
 class CategoryConsumer(HubConsumer):
     async def connect(self):
+        if not self.scope["user"].is_authenticated:
+            self.accept()
+            self.send_warning("You are not authenticated!")
+            self.disconnect()
+
         self.dictionary_name = self.scope["url_route"]["kwargs"]["dict_slug"]
         self.group_name = "_".join([self.dictionary_name, Category.GROUP_NAME])
 
@@ -40,16 +45,6 @@ class CategoryConsumer(HubConsumer):
             await self.send_warning("Nice try.")
         except Exception as e:
             LOGGER.error(f"Exception in method {method}", exc_info=True)
-
-    # async def create(self, event):
-    #     LOGGER.debug("Creating")
-    #     LOGGER.debug(event)
-    #     await self.channel_layer.group_send(
-    #         self.group_name,
-    #         {
-    #             event["content"]
-    #         }
-    #     )
 
     async def read(self, cat_data):
         LOGGER.debug("Fetching category")

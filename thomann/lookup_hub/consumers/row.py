@@ -14,6 +14,11 @@ CHANNEL_NAME = "hub"
 
 class RowConsumer(HubConsumer):
     async def connect(self):
+        if not self.scope["user"].is_authenticated:
+            self.accept()
+            self.send_warning("You are not authenticated!")
+            self.disconnect()
+
         dictionary_name = self.scope["url_route"]["kwargs"]["dict_slug"]
         self.group_name = "_".join([dictionary_name, Row.GROUP_NAME])
 
