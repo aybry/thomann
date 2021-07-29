@@ -103,7 +103,7 @@ function sockInsertCategory(catID) {
  */
 
  function updateCatElement(responseData) {
-    $catContainerCurrent = $(`.cat-container[data-cat-id='${responseData["prev_id"]}']`).first();
+    $catContainerCurrent = $(`.cat-container[data-cat-id='${responseData["id"]}']`).first();
     $catContainerCurrent.find(".cat-header").text(escapeHTML(responseData["name"]));
 }
 
