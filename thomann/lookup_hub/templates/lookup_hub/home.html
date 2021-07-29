@@ -1,5 +1,19 @@
 {% extends "lookup_hub/base.html" %}
 
+
+{% block header %}Welcome to the Lookup Hub{% endblock %}
+
+
 {% block body %}
-    Welcome to the language hub!
+<div id="home-container">
+    <p>This is a place for collaborative work on a custom dictionary.</p>
+
+    <p>
+        First time here? <a href="/dictionary/sandbox">Visit the Sandbox first</a>.
+    </p>
+
+    <p>
+        Or, if you know what you're doing, <a href="/dictionary/lookup_hub">head on over to the hub</a>.
+    </p>
+</div>
 {% endblock %}

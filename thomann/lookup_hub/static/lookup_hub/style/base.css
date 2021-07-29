@@ -50,7 +50,7 @@ a:link:hover > i {
 #grid-body > header {
     background-color: var(--grid-elem-header-bg);
     color: var(--grid-elem-header-text);
-    border-style: solid;
+    /* border-style: solid; */
     border-color: var(--grid-elem-header-border);
     border-width: 1px 0 2px 0;
     padding: 8px 4px;
@@ -184,3 +184,9 @@ input[type="button"]:hover {
     margin: 50px auto;
 }
 
+#home-container {
+    display: block;
+    width: max-content;
+    max-width: 500px;
+    margin: 50px auto;
+}

@@ -33,6 +33,11 @@
     <div id="grid-container">
 
         <div id="grid-body">
+            <header>
+                {% block header %}{% endblock %}
+            </header>
+
+
             {% block body %}
                 Welcome to the language hub!
             {% endblock %}

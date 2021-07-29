@@ -21,7 +21,9 @@ class DictionaryView(LoginRequiredMixin, TemplateView):
         }
 
 
-class SandboxView(DictionaryView):
+class SandboxView(TemplateView):
+    template_name = "lookup_hub/dictionary.html"
+
     def get_context_data(self, **kwargs):
         sandbox_dictionary = models.Dictionary.objects.get(slug="sandbox")
         dictionary_srl = serialisers.DictionarySerialiser(sandbox_dictionary)
