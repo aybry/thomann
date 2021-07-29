@@ -1,0 +1,7 @@
+.vscode/*
+*__pycache__/
+staticfiles
+data/
+logs/
+.env
+init-letsencrypt.sh

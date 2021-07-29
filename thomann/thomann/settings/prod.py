@@ -12,6 +12,9 @@ ALLOWED_HOSTS = [
 ]
 
 
+STATIC_ROOT = "/usr/src/app/staticfiles"
+
+
 REDIS_HOSTNAME = "redis"
 CELERY_BROKER_URL = f"redis://{REDIS_HOSTNAME}:6379"
 CELERY_RESULT_BACKEND = f"redis://{REDIS_HOSTNAME}:6379"
@@ -23,3 +26,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+LOGGING["loggers"]["lookup_hub"]["level"] = "INFO"

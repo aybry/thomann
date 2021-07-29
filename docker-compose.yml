@@ -6,19 +6,16 @@ services:
     container_name: thomann_redis
     image: redis
     ports:
-      - "6380:6379"
+      - "6379:6379"
 
-  asgi:
-    container_name: thomann_asgi
+  wsgi:
+    container_name: thomann_wsgi
     build: .
-    command: daphne -e ssl:7999:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
+    command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate --noinput && gunicorn thomann.wsgi:application -b 0.0.0.0:8001"
+    expose:
+      - 8001
     volumes:
       - static_volume:/usr/src/app/staticfiles
-      - .:/usr/src/app
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    ports:
-      - "7999:7999"
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
       - THOMANN_DB_HOST=${DBHOST}
@@ -27,23 +24,46 @@ services:
       - THOMANN_DB_SCHEMA=${DBSCHEMA}
       - THOMANN_DB_USERNAME=${DBUNAME}
       - THOMANN_DB_PASSWORD=${DBPASS}
-      - SECRET_KEY=${THOMANN_SECRET_KEY}
+      - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
+
+  asgi:
+    container_name: thomann_asgi
+    build: .
+    expose:
+      - 8080
+    command: daphne -e ssl:8080:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - ./thomann/:/usr/src/app
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "8080:8080"
+    environment:
+      - DJANGO_SETTINGS_MODULE=thomann.settings.prod
+      - THOMANN_DB_HOST=${DBHOST}
+      - THOMANN_DB_PORT=${DBPORT}
+      - THOMANN_DB_NAME=${DBNAME}
+      - THOMANN_DB_SCHEMA=${DBSCHEMA}
+      - THOMANN_DB_USERNAME=${DBUNAME}
+      - THOMANN_DB_PASSWORD=${DBPASS}
+      - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
 
   nginx:
     container_name: thomann_nginx
     image: nginx
     build:
-      context: ./nginx_dev
+      context: ./nginx
       network: host
     ports:
       - "80:80"
       - "443:443"
     restart: always
     depends_on:
-      - wsgi
+      - asgi
     volumes:
       - static_volume:/usr/src/app/staticfiles
-      - ./nginx_dev:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
 
@@ -57,8 +77,3 @@ services:
 
 volumes:
   static_volume:
-
-networks:
-  default:
-    external:
-      name: thomann_network

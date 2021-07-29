@@ -4,8 +4,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 ENV APP_HOME=/srv
-RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/logs
 WORKDIR $APP_HOME
 
 RUN pip install --upgrade pip

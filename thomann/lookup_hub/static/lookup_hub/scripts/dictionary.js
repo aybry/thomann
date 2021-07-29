@@ -132,7 +132,7 @@ class Category {
                 <button
                     class="pure-button dictionary-button"
                     title="Insert new category here"
-                    onclick="sockInsertCat('${this.id}');">
+                    onclick="sockInsertCategory('${this.id}');">
                     <i class="fas fa-folder-plus fa-lg"></i>
                 </button>
             </td>
