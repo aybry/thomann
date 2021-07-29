@@ -1,0 +1,40 @@
+#menu {
+    display: flex;
+    padding: 8px;
+    width: 100%;
+    position: fixed;
+    background-color: var(--menu-bg);
+    z-index: 9;
+}
+
+.menu-button {
+    margin-right: 8px;
+    padding: 12px 24px;
+    border-radius: 3px;
+    color: var(--moncom-gold-light);
+    background-color: var(--moncom-blue);
+}
+
+.menu-button i {
+    color: var(--moncom-gold-light);
+    margin-right: 8px;
+}
+
+.menu-button.labelless i {
+    margin-right: 0;
+}
+
+.menu-button:hover {
+    background-color: var(--moncom-blue-hover);
+    /* color: var(--moncom-gold-hover); */
+    transition: background-color .1s ease;
+    cursor: pointer;
+}
+
+#menu-filler {
+    flex-grow: 1;
+}
+
+.menu-rightmost {
+    margin-right: 0;
+}

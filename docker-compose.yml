@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+
+  redis:
+    container_name: thomann_redis
+    image: redis
+    ports:
+      - "6380:6379"
+
+  asgi:
+    container_name: thomann_asgi
+    build: .
+    command: daphne -e ssl:7999:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - .:/usr/src/app
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "7999:7999"
+    environment:
+      - DJANGO_SETTINGS_MODULE=thomann.settings.prod
+      - THOMANN_DB_HOST=${DBHOST}
+      - THOMANN_DB_PORT=${DBPORT}
+      - THOMANN_DB_NAME=${DBNAME}
+      - THOMANN_DB_SCHEMA=${DBSCHEMA}
+      - THOMANN_DB_USERNAME=${DBUNAME}
+      - THOMANN_DB_PASSWORD=${DBPASS}
+      - SECRET_KEY=${THOMANN_SECRET_KEY}
+
+  nginx:
+    container_name: thomann_nginx
+    image: nginx
+    build:
+      context: ./nginx_dev
+      network: host
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    depends_on:
+      - wsgi
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - ./nginx_dev:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+  certbot:
+    container_name: thomann_certbot
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+volumes:
+  static_volume:
+
+networks:
+  default:
+    external:
+      name: thomann_network

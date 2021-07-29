@@ -1,0 +1,144 @@
+{% extends "lookup_hub/base.html" %}
+{% load static %}
+
+
+{% block title %}Dictionary: {{ dictionary.name_verbose }}{% endblock %}
+
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'lookup_hub/style/hub.css' %}?{% now ''='u' %}">
+{% endblock %}
+
+
+{% block header_scripts %}
+<script type="application/javascript">
+    const socketType = window.location.protocol === "https:" ? "wss" : "ws";
+    const portNumber = socketType === "wss" ? ":7999" : ":8000";
+</script>
+{{ dictionary_data|json_script:"dictionary-data" }}
+<script>
+    const dictionaryData = JSON.parse(document.getElementById('dictionary-data').textContent);
+</script>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'lookup_hub/scripts/dictionary.js' %}?{% now 'v=u' %}"></script>
+<script src="{% static 'lookup_hub/scripts/rowSocket.js' %}?{% now 'v=u' %}"></script>
+<script src="{% static 'lookup_hub/scripts/catSocket.js' %}?{% now 'v=u' %}"></script>
+{% endblock %}
+
+
+{% block right_buttons %}
+    <div class="navigator-button-right">
+        <!-- <button class="pure-button" id="undo-button"
+            title="Re-add the last row you deleted."
+            onclick="dictionary.undo();" disabled>Undo last delete</button> -->
+        <!-- <button class="pure-button" id="dl-dict-button"
+            title="If you've made a few changes, download the current dictionary and keep it, just in case Sam screws up and we lose data. (He promises to try not to.)"
+            >Download dictionary</button> -->
+        <!-- <div class="pure-button" id="socket-status" onclick="startSocket();" disabled>Waiting...</div> -->
+    </div>
+{% endblock %}
+
+
+{% block body %}
+    <!-- <header>{{ dictionary.name_display }}</header> -->
+    <table id="hub-table">
+        <thead class="grid-elem de">
+            <th></th>
+            <th></th>
+            <th class="text-cell hub-header ">
+                German
+            </th>
+            <th class="text-cell hub-header" >
+                English
+            </th>
+            <th class="text-cell hub-header ">
+                Dutch
+            </th>
+            <th class="empty"></th>
+        </thead>
+    </table>
+{% endblock %}
+
+
+{% block popups %}
+<div class="popup" id="edit-category-form">
+    <div id="cat-name-row">
+        <div>Category name:</div>
+        <div class="input-wrapper">
+            <input class="wide-input" type="text" id="category-name">
+        </div>
+    </div>
+
+    <div class="button-row">
+        <button id="submit-category-button">
+            <i class="fas fa-check"></i>
+            Submit
+        </button>
+        <button onclick="$('#popup-container').hide();">
+            <i class="fas fa-times"></i>
+            Cancel
+        </button>
+    </div>
+
+    <div class="id-row">Category ID: <span id="cat-id"></span></div>
+    </div>
+<div class="popup" id="edit-row-cells-form">
+    <div id="edit-entry-grid">
+        <div class="edit-entry-header edit-entry-grid-elem header-de">
+            DE
+        </div>
+        <div class="edit-entry-header edit-entry-grid-elem header-en">
+            EN
+        </div>
+        <div class="edit-entry-header edit-entry-grid-elem header-nl">
+            NL
+        </div>
+
+        <div class="edit-entry-row edit-entry-grid-elem row-de">
+            <input type="text" name="text-de" id="text-de">
+        </div>
+        <div class="edit-entry-row edit-entry-grid-elem row-en">
+            <input type="text" name="text-en" id="text-en">
+        </div>
+        <div class="edit-entry-row edit-entry-grid-elem row-nl">
+            <input type="text" name="text-nl" id="text-nl">
+        </div>
+
+        <div class="edit-entry-row edit-entry-grid-elem row-de">
+            <textarea name="comment-de" id="comment-de" rows="10"></textarea>
+        </div>
+        <div class="edit-entry-row edit-entry-grid-elem row-en">
+            <textarea name="comment-en" id="comment-en" rows="10"></textarea>
+        </div>
+        <div class="edit-entry-row edit-entry-grid-elem row-nl">
+            <textarea name="comment-nl" id="comment-nl" rows="10"></textarea>
+        </div>
+
+        <div class="edit-entry-row edit-entry-grid-elem row-de">
+            <input type="color" id="colour-de" value="#FFFFFF">
+        </div>
+        <div class="edit-entry-row edit-entry-grid-elem row-en">
+            <input type="color" id="colour-en" value="#FFFFFF">
+        </div>
+        <div class="edit-entry-row edit-entry-grid-elem row-nl">
+            <input type="color" id="colour-nl" value="#FFFFFF">
+        </div>
+
+        <div class="button-row">
+            <button id="submit-row-button">
+                <i class="fas fa-check"></i>
+                Submit
+            </button>
+            <button onclick="$('#popup-container').hide();">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+        </div>
+
+        <div class="id-row">Row ID: <span id="row-id"></span></div>
+    </div>
+</div>
+{% endblock %}

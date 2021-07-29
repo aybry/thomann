@@ -1,0 +1,135 @@
+{% extends "lookup_hub/base.html" %}
+{% load static %}
+
+{% block title %}Lookup Hub Guide{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'lookup_hub/style/hub.css' %}">
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block right_buttons %}
+{% endblock %}
+
+{% block body %}
+<header>Hub Guide</header>
+<main id="guide-container">
+    <div id="table-container">
+        <h2>The Buttons</h2>
+        <main>
+
+            <table id="guide-table">
+                <tr>
+                    <td class="button-cell">
+                        <button class="pure-button dictionary-button"
+                            title="Delete this row">
+                            <i class="far fa-minus-square fa-lg"></i>
+                        </button>
+                    </td>
+                    <td>
+                        This button removes the corresponding row from the dictionary.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="button-cell">
+                        <button class="pure-button dictionary-button"
+                            title="Insert new row here">
+                            <i class="far fa-plus-square fa-lg"></i>
+                        </button>
+                    </td>
+                    <td>
+                        This button inserts an empty row into the dictionary <i>at</i> (not after) its corresponding row.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="button-cell">
+                        <button class="pure-button dictionary-button"
+                            title="Edit this row">
+                            <i class="far fa-edit fa-lg"></i>
+                        </button>
+                    </td>
+                    <td>
+                        This button opens up a dialogue with which you can edit a dictionary entry's data.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="button-cell">
+                        <button class="pure-button"
+                            title="Re-add the last row you deleted.">
+                            Undo last delete
+                        </button>
+                    </td>
+                    <td>
+                        If you accidentally deleted a row, use this button to undo its deletion. You can press <span class="keyboard-key">Ctrl</span> + <span class="keyboard-key">Z</span> as a shortcut. For now, other actions (editing an entry, adding a new row, etc.) cannot be undone other than manually re-editing the data, deleting the row, etc.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="button-cell">
+                        <button class="pure-button"
+                            title="If you've made a few changes, download the current dictionary and keep it, just in case Sam screws up and we lose data. (He promises to try not to.)">
+                            Download dictionary
+                        </button>
+                    </td>
+                    <td>
+                        Use this button to download your own local copy (.csv) of the dictionary that can be opened with spreadsheet software such as Excel. The changes you make to this document won't show up in the hub; this feature is for convenience and a kind of additional backup.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="button-cell">
+                        <div class="pure-button connected" disabled>Connected</div>
+                    </td>
+                    <td>
+                        Every change you make is simultaneously also made within the hub. If this button says "Disconnected", any changes you make won't be saved to the hub. If this is the case, try refreshing the page. If you are still having trouble, get in touch with Sam.
+                    </td>
+                </tr>
+            </table>
+        </main>
+    </div>
+
+    <div id="screenshot-container">
+        <h2>Main View</h2>
+        <main>
+            <p>
+                This is what you see when you open the Sandbox; the Hub itself is much longer. Use the Sandbox to get used to the hub's features before making permanent changes. Try adding, editing and removing rows, and undo these deletes too. Note that the Sandbox is <i>much</i> faster than the Hub itself.
+            </p>
+            <img src="{% static 'lookup_hub/img/hub.png' %}">
+        </main>
+
+        <h2>Edit an Entry</h2>
+        <main>
+            <p>
+                The small input fields in the first row are for the translations; the larger ones are for corresponding comments. Finally, the colour input boxes are for colour-coding the entry (e.g. to let others know who made the entry). To save changes, press the 'Submit' button. As a shortcut, if a translation input field is in focus (as opposed to a comment field), you can press <span class="keyboard-key">Enter</span>. To close the dialogue without saving changes, press the 'Cancel' button, the <span class="keyboard-key">Escape</span> key or click outside of the coloured box. All changes are lost in this case.
+            </p>
+            <img src="{% static 'lookup_hub/img/edit-dialogue.png' %}">
+        </main>
+
+        <h2>Comments</h2>
+        <main>
+            <p>
+                If you hover over the sticky note icon where an entry has a comment, the comment is shown in a bubble.
+            </p>
+            <img src="{% static 'lookup_hub/img/comment-hover.png' %}">
+        </main>
+
+        <h2>Colour Selection</h2>
+        <main>
+            <p>
+                Depending on which browser you use, the colour selection tool will look something like the screenshots below. Entering numbers is more accurate than dragging and selecting with your mouse.
+            </p>
+            <img src="{% static 'lookup_hub/img/colour-select-firefox.png' %}" alt="Colour selection in Firefox">
+            <img src="{% static 'lookup_hub/img/colour-select-chrome.png' %}" alt="Colour selection in Chrome">
+        </main>
+
+        <h2>Issues?</h2>
+        <main>
+            <p>
+                If you're having trouble, get in touch! I'll be happy to help.
+            </p>
+        </main>
+
+    </div>
+</main>
+
+{% endblock %}

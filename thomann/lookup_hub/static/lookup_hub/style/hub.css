@@ -1,0 +1,190 @@
+#hub-table {
+    min-width: 900px;
+    max-width: 100%;
+    margin: 16px auto;
+    border-spacing: 4px;
+}
+
+#hub-table th, #hub-table td {
+    border-radius: 3px;
+}
+
+#hub-table td {
+    border: solid 1px var(--v-v-slightly-darken);
+}
+
+#hub-table td.no-border {
+    border: unset;
+}
+
+#hub-table td.text-cell {
+    background-color: var(--object-list-box-bg);
+}
+
+#hub-table td.filler {
+    opacity: 0;
+}
+
+#hub-table th {
+    height: 50px;
+}
+/*
+tbody.cat-container > tr {
+    padding-top: 20px;
+} */
+
+.spacer-row {
+    height: 20px;
+}
+
+#hub-table th.cat-header {
+    background-color: var(--v-v-v-slightly-darken);
+    height: 40px;
+}
+
+#hub-table .text-cell {
+    min-width: 300px;
+    width: 30%;
+    max-width: 450px;
+}
+
+.grid-elem {
+    border-radius: 3px;
+    min-height: 30px;
+}
+
+.hub-header {
+    background-color: rgb(163, 163, 163);
+    /* color: */
+    padding: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.hub-entry {
+    padding: 7px;
+    background-color: var(--off-white);
+    position: relative;
+}
+
+.entry-comment-wrapper {
+    position: absolute;
+    right: 8px;
+    top: 25%;
+}
+
+.entry-comment {
+    opacity: 50%;
+}
+
+.buttons-left, .buttons-right {
+    width: 10px;
+}
+
+.buttons-left button, .buttons-right button {
+    opacity: 0.5;
+}
+
+.dictionary-button:hover .fa-minus-square {
+    color: var(--delete-row-red);
+}
+
+.dictionary-button:hover .fa-plus-square {
+    color: var(--add-row-green);
+}
+
+.dictionary-button:hover .fa-edit {
+    color: var(--edit-row-yellow);
+}
+
+
+.disconnected {
+    color: var(--darkred);
+}
+
+.connected {
+    color: var(--darkgreen);
+}
+
+#edit-entry-grid {
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    min-width: 900px;
+    max-width: 1500px;
+    display: grid;
+}
+
+.edit-entry-grid-elem {
+    width: 100%;
+}
+
+input[type="color"] {
+    width: 20%;
+    height: 30px;
+    margin: 0 40% 24px;
+}
+
+.edit-entry-header {
+    text-align: center;
+    margin: auto;
+    font-size: larger;
+    color: var(--off-white);
+}
+
+.edit-entry-row {
+    margin: auto;
+    align-content: center;
+}
+
+.edit-entry-row input[type="text"], .edit-entry-row textarea {
+    width: 100%;
+}
+
+.edit-entry-row textarea {
+    resize: none;
+}
+
+.button-row {
+    grid-column: 1 / 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-row button {
+    width: 30%;
+    margin: 0 10px;
+    font-size: large;
+}
+
+.button-row button i {
+    margin-right: 8px;
+}
+
+.id-row {
+    margin-top: 32px;
+    font-size: small;
+    grid-column: 1 / 4;
+}
+
+#cat-name-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 600px;
+    width: 50%;
+    margin: auto;
+}
+
+#cat-name-row > div {
+    margin: 16px 16px 64px;
+}
+
+#cat-name-row > div.input-wrapper {
+    flex-grow: 1;
+}
+
+#cat-name-row > div.input-wrapper > input {
+    width: 100%;
+}
