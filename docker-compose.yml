@@ -33,6 +33,7 @@ services:
       - 8080
     command: daphne -e ssl:8080:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
     volumes:
+      - backup_volume:/usr/src/app/thomann/backups
       - static_volume:/usr/src/app/staticfiles
       - ./thomann/:/usr/src/app
       - ./data/certbot/conf:/etc/letsencrypt
@@ -76,4 +77,6 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
+  backup_volume:~/tlh_backups
   static_volume:
+
