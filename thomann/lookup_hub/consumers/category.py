@@ -13,13 +13,13 @@ LOGGER = logging.getLogger(__name__)
 
 class CategoryConsumer(HubConsumer):
     async def connect(self):
-        if not self.scope["user"].is_authenticated:
+        self.dictionary_name = self.scope["url_route"]["kwargs"]["dict_slug"]
+        self.group_name = "_".join([self.dictionary_name, Category.GROUP_NAME])
+
+        if self.dictionary_name != "sandbox" and not self.scope["user"].is_authenticated:
             self.accept()
             self.send_warning("You are not authenticated!")
             self.disconnect()
-
-        self.dictionary_name = self.scope["url_route"]["kwargs"]["dict_slug"]
-        self.group_name = "_".join([self.dictionary_name, Category.GROUP_NAME])
 
         LOGGER.debug(f"Connecting to channel group {self.group_name}")
 
