@@ -125,10 +125,9 @@ i.right-aligned {
 	border-radius: 10px;
 	border: 10px solid var(--popup-border);
 	background-color: var(--popup-bg);
-	min-width: 500px;
 	margin: 10vw auto auto;
 	padding: 50px;
-	width: 60%;
+	min-width: 60%;
 	max-width: 80%;
 }
 
@@ -189,4 +188,21 @@ input[type="button"]:hover {
     width: max-content;
     max-width: 500px;
     margin: 50px auto;
+}
+
+#toolbox {
+    position: fixed;
+    left: 0;
+    top: 100px;
+    border-color: black;
+    padding: 8px;
+}
+
+.toolbox-button > i {
+    margin-right: 12px;
+}
+
+.centered-inline-button {
+    display: block;
+    margin: 0 auto;
 }

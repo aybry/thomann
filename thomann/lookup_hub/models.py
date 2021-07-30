@@ -32,14 +32,24 @@ class Category(OrderedModel):
 
 class Row(OrderedModel):
     GROUP_NAME = "row"
+    ordered_with_respect_to = "category"
 
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
-    ordered_with_respect_to = "category"
+    deleted_from = models.ForeignKey(
+        Category,
+        default=None,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="deleted_row_set",
+    )
 
     is_flagged = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
+    deleted_at = models.DateTimeField(blank=True, null=True, default=None)
 
     en_text = models.CharField(max_length=500, blank=True, default="")
     en_comment = models.CharField(max_length=2000, blank=True, default="")

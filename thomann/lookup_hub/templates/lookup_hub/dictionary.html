@@ -26,6 +26,7 @@
 <script src="{% static 'lookup_hub/scripts/dictionary.js' %}?{% now 'v=u' %}"></script>
 <script src="{% static 'lookup_hub/scripts/rowSocket.js' %}?{% now 'v=u' %}"></script>
 <script src="{% static 'lookup_hub/scripts/catSocket.js' %}?{% now 'v=u' %}"></script>
+<script src="{% static 'lookup_hub/scripts/rubbish.js' %}?{% now 'v=u' %}"></script>
 {% endblock %}
 
 
@@ -43,23 +44,29 @@
 
 {% block header %}{{ dictionary.name_verbose }}{% endblock %}
 
+{% block toolbox %}
+<button class="toolbox-button" onclick="sockReadDeleted();">
+    <i class="fas fa-trash"></i>Rubbish
+</button>
+{% endblock %}
+
 {% block body %}
-    <table id="hub-table">
-        <thead class="grid-elem de">
-            <th></th>
-            <th></th>
-            <th class="text-cell hub-header ">
-                German
-            </th>
-            <th class="text-cell hub-header" >
-                English
-            </th>
-            <th class="text-cell hub-header ">
-                Dutch
-            </th>
-            <th class="empty"></th>
-        </thead>
-    </table>
+<table id="hub-table">
+    <thead class="grid-elem de">
+        <th></th>
+        <th></th>
+        <th class="text-cell hub-header ">
+            German
+        </th>
+        <th class="text-cell hub-header" >
+            English
+        </th>
+        <th class="text-cell hub-header ">
+            Dutch
+        </th>
+        <th class="empty"></th>
+    </thead>
+</table>
 {% endblock %}
 
 
@@ -84,7 +91,8 @@
     </div>
 
     <div class="id-row">Category ID: <span id="cat-id"></span></div>
-    </div>
+</div>
+
 <div class="popup" id="edit-row-cells-form">
     <div id="edit-entry-grid">
         <div class="edit-entry-header edit-entry-grid-elem header-de">
@@ -140,5 +148,19 @@
 
         <div class="id-row">Row ID: <span id="row-id"></span></div>
     </div>
+</div>
+
+<div class="popup" id="rubbish-popup">
+    <table id="rubbish-table">
+        <thead>
+            <th class="rubbish-wide">DE</th>
+            <th class="rubbish-wide">EN</th>
+            <th class="rubbish-wide">NL</th>
+            <th class="rubbish-normal-width">Category</th>
+            <th class="rubbish-normal-width">Deleted on</th>
+            <th class="rubbish-actions">Actions</th>
+        </thead>
+        <tbody id="rubbish-table-body"></tbody>
+    </table>
 </div>
 {% endblock %}

@@ -188,3 +188,43 @@ input[type="color"] {
 #cat-name-row > div.input-wrapper > input {
     width: 100%;
 }
+
+#rubbish-table {
+    width: 100%;
+    border-spacing: 8px;
+}
+
+.rubbish-wide {
+    min-width: 80px;
+    max-width: 20%;
+}
+
+.rubbish-normal-width {
+    min-width: 80px;
+    max-width: 20%;
+}
+
+.rubbish-fill-width {
+    width: 100%;
+}
+
+.rubbish-actions {
+    min-width: 80px;
+}
+
+.centered {
+    text-align: center;
+}
+
+#rubbish-table th {
+    padding: 12px;
+    border-radius: 4px;
+    background-color: var(--v-v-slightly-darken);
+    margin-bottom: 16px;
+}
+
+#rubbish-table td {
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: var(--v-v-slightly-lighten);
+}

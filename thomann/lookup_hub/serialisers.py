@@ -10,9 +10,12 @@ class RowSerialiser(serializers.ModelSerializer):
         fields = (
             "id",
             "category",
+            "deleted_from",
+            "is_deleted",
             "is_flagged",
             "created_at",
             "updated_at",
+            "deleted_at",
             "en_text",
             "en_comment",
             "en_colour",
@@ -22,6 +25,22 @@ class RowSerialiser(serializers.ModelSerializer):
             "nl_text",
             "nl_comment",
             "nl_colour",
+        )
+
+
+
+class DeletedRowSerialiser(serializers.ModelSerializer):
+    category_name = serializers.CharField(source="deleted_from.name", read_only=True)
+
+    class Meta:
+        model = models.Row
+        fields = (
+            "id",
+            "category_name",
+            "deleted_at",
+            "en_text",
+            "de_text",
+            "nl_text",
         )
 
 

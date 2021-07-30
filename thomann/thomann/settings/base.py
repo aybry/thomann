@@ -140,7 +140,7 @@ LOGGING = {
         "lookup_hub": {
             "handlers": ["console", "file"],
             "propagate": True,
-            "level": "DEBUG",
+            "level": os.getenv("DEBUG_LEVEL", "INFO"),
         },
     }
 }

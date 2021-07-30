@@ -26,5 +26,3 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-LOGGING["loggers"]["lookup_hub"]["level"] = "INFO"

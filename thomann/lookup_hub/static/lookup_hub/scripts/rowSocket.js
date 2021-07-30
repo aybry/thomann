@@ -42,10 +42,18 @@ function startRowSocket() {
             updateRowElement(response["data"]);
         } else if (response["action"] == "inserted") {
             insertRowElement(response["data"]);
+            if (response["data"]["subaction"] == "restored") {
+                $(`.rubbish-row[data-row-id="${ response["data"]["new_row"]["id"] }"]`).remove();
+            }
         } else if (response["action"] == "deleted") {
             deleteRowElement(response["data"]);
         } else if (response["action"] == "appended") {
             appendRowElement(response["data"]);
+            if (response["data"]["subaction"] == "restored") {
+                $(`.rubbish-row[data-row-id="${ response["data"]["new_row"]["id"] }"]`).remove();
+            }
+        } else if (response["action"] == "read_deleted") {
+            showRubbishPopup(response["data"]);
         }
     };
 }
@@ -97,10 +105,10 @@ function showEditRowWindow(row) {
  * Socket functions
  */
 
-function sockReadRow(rowID) {
+function sockReadRow(rowId) {
     var socketData = {
         method: "read",
-        data: { id: rowID },
+        data: { id: rowId },
     };
 
     rowSocket.send(JSON.stringify(socketData));
@@ -115,30 +123,49 @@ function sockUpdateRow(rowData) {
 }
 
 
-function sockInsertRow(rowID) {
+function sockInsertRow(rowId) {
     var socketData = {
         method: "insert",
-        data: { id: rowID },
+        data: { id: rowId },
     };
 
     rowSocket.send(JSON.stringify(socketData));
 }
 
 
-function sockAppendRow(rowID) {
+function sockAppendRow(rowId) {
     var socketData = {
         method: "append",
-        data: { id: rowID },
+        data: { id: rowId },
     };
 
     rowSocket.send(JSON.stringify(socketData));
 }
 
 
-function sockDeleteRow(rowID) {
+function sockDeleteRow(rowId) {
     var socketData = {
         method: "delete",
-        data: { id: rowID },
+        data: { id: rowId },
+    };
+
+    rowSocket.send(JSON.stringify(socketData));
+}
+
+
+function sockReadDeleted() {
+    var socketData = {
+        method: "read_deleted",
+    };
+
+    rowSocket.send(JSON.stringify(socketData));
+}
+
+
+function sockRestoreRow(rowId) {
+    var socketData = {
+        method: "restore",
+        data: { id: rowId },
     };
 
     rowSocket.send(JSON.stringify(socketData));
@@ -157,7 +184,7 @@ function updateRowElement(rowData) {
 
 
 function insertRowElement(responseData) {
-    $rowCurrent = $(`[data-row-id='${responseData["prev_id"]}']`).first();
+    $rowCurrent = $(`.entry-row[data-row-id='${responseData["prev_id"]}']`).first();
     var rowNew = new Row(responseData["new_row"]);
     rowNew.jq.insertBefore($rowCurrent);
 }
@@ -172,7 +199,7 @@ function appendRowElement(responseData) {
 
 
 function deleteRowElement(responseData) {
-    $rowCurrent = $(`[data-row-id='${responseData["id"]}']`).first();
+    $rowCurrent = $(`.entry-row[data-row-id='${responseData["id"]}']`).first();
     $rowCurrent.remove();
 }
 
