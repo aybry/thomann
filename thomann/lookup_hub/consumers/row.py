@@ -205,7 +205,7 @@ class RowConsumer(HubConsumer):
         row_srl = RowSerialiser(row, data=new_row_data, partial=True)
 
         if row_srl.is_valid():
-            LOGGER.info(row_srl.validated_data)
+            LOGGER.debug(row_srl.validated_data)
             row_srl.save()
             LOGGER.debug("Deleted")
 
@@ -231,7 +231,7 @@ class RowConsumer(HubConsumer):
         row_srl = RowSerialiser(row, data=new_row_data, partial=True)
 
         if row_srl.is_valid():
-            LOGGER.info(row_srl.validated_data)
+            LOGGER.debug(row_srl.validated_data)
             row_srl.save()
             LOGGER.debug("Restored")
         else:
