@@ -106,14 +106,6 @@ class Category {
     }
 
 
-    insertNewAfter(prevCatID) {
-        var tbody = this.makeTbodyJQ();
-        var prevTbody = getTbodyElementByCatID(prevCatID);
-        tbody.insertAfter(prevTbody);
-        console.log(prevCatID)
-        console.log('inserted')
-    }
-
     get lastRowJQ() {
         return $(`<tr data-cat-id="${this.id}">
             <td class="no-border"></td>
@@ -224,15 +216,6 @@ class Row {
 }
 
 
-function emptyIfNull(string) {
-    if (string === null) {
-        return "";
-    } else {
-        return String(string);
-    }
-}
-
-
 var escape = document.createElement('textarea');
 function escapeHTML(html) {
     escape.textContent = html;
@@ -261,8 +244,6 @@ const leftButtonsHTML = (row) => `
     </td>
 `
 
-
-// data-row-id="${ row.id }">
 const dictionaryElemsHTML = (row) => `
     <td class="hub-entry text-cell de"
         ` + row.colourHTML("de") + `>
@@ -296,7 +277,6 @@ const dictionaryElemsHTML = (row) => `
     </td>
     `
 
-
 const rightButtonsHTML = (row) => `
     <td class="buttons-right">
         <button
@@ -308,6 +288,7 @@ const rightButtonsHTML = (row) => `
         </button>
     </td>
     `
+
 
 const rightButtonsHTMLCategory = (category) => `
     <td class="buttons-right"">
@@ -321,6 +302,7 @@ const rightButtonsHTMLCategory = (category) => `
     </td>
     `
 
+
 const rowHTML = (row) => `<tr class="entry-row" data-row-id="${ row.id }">` +
         leftButtonsHTML(row) +
         dictionaryElemsHTML(row) +
@@ -328,34 +310,8 @@ const rowHTML = (row) => `<tr class="entry-row" data-row-id="${ row.id }">` +
     `</tr>`;
 
 
-function initSession() {
-    window.sessionStorage.lastDeleteNeighbourIDs = "[]";
-    window.sessionStorage.lastDeleted = "[]";
-}
-
-
-function pushToSession(key, value) {
-    var sessArray = JSON.parse(window.sessionStorage.getItem(key));
-    sessArray.push(value);
-    window.sessionStorage.setItem(key, JSON.stringify(sessArray));
-}
-
-
-function popFromSession(key) {
-    var sessArray = JSON.parse(window.sessionStorage.getItem(key));
-    var value = sessArray.pop();
-    window.sessionStorage.setItem(key, JSON.stringify(sessArray));
-    return value;
-}
-
-
-function lastDeleted() {
-    return JSON.parse(window.sessionStorage.lastDeleted);
-}
-
-
-function lastDeleteNeighbourIDs() {
-    return JSON.parse(window.sessionStorage.lastDeleteNeighbourIDs);
+function downloadBackup() {
+    $("#get-backup-link")[0].click();
 }
 
 
@@ -373,9 +329,6 @@ $(document).ready( function() {
 
     dictionary = new Dictionary();
     dictionary.initialise();
-
-    initSession();
-    $("#undo-button").prop("disabled", true);
 
     $("#popup-container").on("click", function(event) {
         if (event.target == $("#popup-container")[0]) {
@@ -404,17 +357,4 @@ $(document).ready( function() {
             $("#submit-category-button").click();
         }
     })
-
-    $("#dl-dict-button").click( function(event) {
-        event.preventDefault();
-        window.location.href = "/download_dict";
-    })
-
-    if (
-        lastDeleteNeighbourIDs().length > 0 &&
-        lastDeleted().length > 0 &&
-        lastDeleteNeighbourIDs().length == lastDeleted().length
-    ) {
-        $("#undo-button").prop("disabled", false);
-    }
 })

@@ -26,9 +26,17 @@
 
 .menu-button:hover {
     background-color: var(--moncom-blue-hover);
-    /* color: var(--moncom-gold-hover); */
     transition: background-color .1s ease;
     cursor: pointer;
+}
+
+.menu-button.no-hover {
+    background-color: var(--moncom-blue-subtle);
+}
+
+.menu-button.no-hover:hover {
+    background-color: var(--moncom-blue-subtle);
+    cursor: default;
 }
 
 #menu-filler {

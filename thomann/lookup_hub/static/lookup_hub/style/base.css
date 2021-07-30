@@ -196,6 +196,12 @@ input[type="button"]:hover {
     top: 100px;
     border-color: black;
     padding: 8px;
+    display: flex;
+    flex-flow: column;
+}
+
+#toolbox > button {
+    margin-bottom: 8px;
 }
 
 .toolbox-button > i {

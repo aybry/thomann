@@ -32,21 +32,22 @@
 
 {% block right_buttons %}
     <div class="navigator-button-right">
-        <!-- <button class="pure-button" id="undo-button"
-            title="Re-add the last row you deleted."
-            onclick="dictionary.undo();" disabled>Undo last delete</button> -->
-        <!-- <button class="pure-button" id="dl-dict-button"
-            title="If you've made a few changes, download the current dictionary and keep it, just in case Sam screws up and we lose data. (He promises to try not to.)"
-            >Download dictionary</button> -->
-        <!-- <div class="pure-button" id="socket-status" onclick="startSocket();" disabled>Waiting...</div> -->
     </div>
 {% endblock %}
 
 {% block header %}{{ dictionary.name_verbose }}{% endblock %}
 
 {% block toolbox %}
+{% if show_backup_button %}
+<button id="download-backup-button" class="toolbox-button"
+    onclick="downloadBackup();"
+    >
+    <i class="far fa-save"></i> Backup
+</button>
+{% endif %}
+
 <button class="toolbox-button" onclick="sockReadDeleted();">
-    <i class="fas fa-trash"></i>Rubbish
+    <i class="fas fa-trash"></i> Rubbish
 </button>
 {% endblock %}
 
@@ -163,4 +164,11 @@
         <tbody id="rubbish-table-body"></tbody>
     </table>
 </div>
+
+{% if show_backup_button %}
+<div class="popup">
+    <a id="get-backup-link" href="/backup" download="hub_backup.json" target="_blank">Backup</a>
+</div>
+{% endif %}
+
 {% endblock %}

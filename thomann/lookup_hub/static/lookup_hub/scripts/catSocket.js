@@ -14,17 +14,24 @@ function startCatSocket() {
         console.log("catSocket is connected");
         $("#socket-status").parent().children("span").text("Connected");
         $("#socket-status")
+            .removeClass("fa-unlink")
+            .addClass("fa-link");
+        $("#socket-status")
             .removeClass("disconnected")
             .addClass("connected");
     }
 
     catSocket.onclose = function() {
         catSocket = null;
+        $("#socket-status").parent().children("span").text("Disconnected");
+        $("#socket-status")
+            .removeClass("fa-link")
+            .addClass("fa-unlink");
         $("#socket-status")
             .removeClass("connected")
             .addClass("disconnected");
-        console.error("catSocket closed unexpectedly. Retrying...");
 
+        console.error("catSocket closed unexpectedly. Retrying...");
         console.log("Trying to connect...")
         setTimeout(startCatSocket, 1000);
     }
