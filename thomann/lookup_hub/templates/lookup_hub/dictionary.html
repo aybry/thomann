@@ -38,6 +38,10 @@
 {% block header %}{{ dictionary.name_verbose }}{% endblock %}
 
 {% block toolbox %}
+<button class="toolbox-button" onclick="sockReadDeleted();">
+    <i class="fas fa-trash"></i> Deleted Items
+</button>
+
 {% if show_backup_button %}
 <button id="download-backup-button" class="toolbox-button"
     onclick="downloadBackup();"
@@ -46,9 +50,6 @@
 </button>
 {% endif %}
 
-<button class="toolbox-button" onclick="sockReadDeleted();">
-    <i class="fas fa-trash"></i> Rubbish
-</button>
 {% endblock %}
 
 {% block body %}
