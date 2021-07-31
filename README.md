@@ -8,11 +8,11 @@ A robust but lightweight custom categorised dictionary tool.
 
 A fully functional version (albeit without the dictionary itself) is available at https://lookup.ay-bryson.com/dictionary/sandbox. See the "Guide" page for how to use it.
 
-# Deployment
-A few notes on how to deploy the repo.
+# Development / Deployment
+A few notes on how to develop and deploy the repo.
 
 ## Environment Variables 
-The project requires a `.env` file in the top-level directory containing the following variables:
+The project requires a `.env` file in the top directory containing the following variables:
 
 ```
 THOMANN_SECRET_KEY=   # Secret key for Django website
@@ -28,11 +28,24 @@ DBPASS=               # Password for username
 SSL certificates are supplied by Let's Encrypt. See the following repo (and the article linked within it) on how to get it up and running.
 https://github.com/wmnnd/nginx-certbot
 
-## Docker
-You will require Docker on your machine as well as docker-compose.
+## Develop
+In the top directory, install dependencies in your favourite virtual environment manager:
 
-## Start
-Start the repo with the usual:
+```
+mkvirtualenv thomann
+workon thomann
+pip install -r requirements.txt
+```
+
+Move into the directory containing the Django project and start the Django server:
+
+```
+cd thomann  # Now you're in {top_dir_repo}/thomann
+python manage.py runserver
+```
+
+## Deploy
+You will require Docker on your machine as well as docker-compose. Start the repo with the usual:
 
 ```
 docker-compose up -d 
