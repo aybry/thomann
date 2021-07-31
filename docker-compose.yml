@@ -15,8 +15,8 @@ services:
     expose:
       - 8001
     volumes:
-      - ~/tlh_backups:/srv/backups
-      - static_volume:/usr/src/app/staticfiles
+      - ~/tlh_backups:/home/backups
+      - static_volume:/usrc/app/staticfiles
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
       - THOMANN_DB_HOST=${DBHOST}
