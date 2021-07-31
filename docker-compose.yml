@@ -10,7 +10,7 @@ services:
 
   wsgi:
     container_name: thomann_wsgi
-    build: .
+    image: ghcr.io/aybry/thomann/thomann:2021-07-31
     command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate --noinput && gunicorn thomann.wsgi:application -b 0.0.0.0:8001"
     expose:
       - 8001
@@ -29,7 +29,7 @@ services:
 
   asgi:
     container_name: thomann_asgi
-    build: .
+    image: ghcr.io/aybry/thomann/thomann:2021-07-31
     expose:
       - 8080
     command: daphne -e ssl:8080:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
