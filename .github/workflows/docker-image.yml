@@ -29,8 +29,11 @@ jobs:
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: set NOW
+        run: |
+          echo "::set-env name=NOW::$(date +'%Y-%m-%d')"
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           push: true
-          tags: thomann:$(date +%s)
+          tags: docker.pkg.github.com/${{ github.repository }}/thomann:${{ env.NOW }}
