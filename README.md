@@ -12,7 +12,7 @@ A fully functional version (albeit without the dictionary itself) is available a
 A few notes on how to develop and deploy the repo.
 
 ## Environment Variables 
-The project requires a `.env` file in the top directory containing the following variables:
+Deployment requires a `.env` file in the top directory containing the following variables:
 
 ```
 THOMANN_SECRET_KEY=   # Secret key for Django website
@@ -22,6 +22,18 @@ DBNAME=               # Name of DB
 DBSCHEMA=             # Schema within DB
 DBUNAME=              # Username with access to DB
 DBPASS=               # Password for username
+```
+
+For development, the code expects the same information under different names and one addition:
+```
+export DJANGO_SETTINGS_MODULE="thomann.settings.dev"
+export THOMANN_SECRET_KEY=    # As above
+export THOMANN_DB_HOST=
+export THOMANN_DB_PORT=
+export THOMANN_DB_NAME=
+export THOMANN_DB_SCHEMA=
+export THOMANN_DB_USERNAME=
+export THOMANN_DB_PASSWORD=
 ```
 
 ## Certbot
