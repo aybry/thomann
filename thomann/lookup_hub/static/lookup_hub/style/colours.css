@@ -12,8 +12,8 @@
     --moncom-gold-dark: rgb(206, 134, 39);
 
     --text-default: rgb(31, 31, 31);
-    --page-bg: rgb(150, 150, 150);
-    --grid-elem-bg: rgb(200, 200, 200);
+    --page-bg: rgb(200, 200, 200);
+    --grid-elem-bg: rgb(240, 240, 240);
     --menu-bg: rgba(98, 105, 117, 0.75);
     --grid-elem-header-bg: var(--moncom-blue-header);
     --grid-elem-header-text:rgb(242, 242, 242);
