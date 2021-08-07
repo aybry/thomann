@@ -10,13 +10,13 @@ services:
 
   wsgi:
     container_name: thomann_wsgi
-    build: .
+    image: ghcr.io/aybry/thomann/thomann:latest
     command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate --noinput && gunicorn thomann.wsgi:application -b 0.0.0.0:8001"
     expose:
       - 8001
     volumes:
       - ~/tlh_backups:/home/backups
-      - static_volume:/usrc/app/staticfiles
+      - static_volume:/usr/src/app/staticfiles
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
       - THOMANN_DB_HOST=${DBHOST}
@@ -26,10 +26,11 @@ services:
       - THOMANN_DB_USERNAME=${DBUNAME}
       - THOMANN_DB_PASSWORD=${DBPASS}
       - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
 
   asgi:
     container_name: thomann_asgi
-    build: .
+    image: ghcr.io/aybry/thomann/thomann:latest
     expose:
       - 8080
     command: daphne -e ssl:8080:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
@@ -49,6 +50,7 @@ services:
       - THOMANN_DB_USERNAME=${DBUNAME}
       - THOMANN_DB_PASSWORD=${DBPASS}
       - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
 
   nginx:
     container_name: thomann_nginx
