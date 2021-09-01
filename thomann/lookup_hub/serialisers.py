@@ -77,3 +77,13 @@ class DictionarySerialiser(serializers.ModelSerializer):
             "name_verbose",
             "category_set",
         )
+
+
+class DictionaryBarebonesSerialiser(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Dictionary
+        fields = (
+            "slug",
+            "name_verbose",
+        )

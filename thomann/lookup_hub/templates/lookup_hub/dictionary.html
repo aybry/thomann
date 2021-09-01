@@ -15,9 +15,12 @@
     const socketType = window.location.protocol === "https:" ? "wss" : "ws";
     const portNumber = socketType === "wss" ? ":8080" : ":8000";
 </script>
-{{ dictionary_data|json_script:"dictionary-data" }}
+{{ dictionary|json_script:"dictionary-info" }}
 <script>
-    const dictionaryData = JSON.parse(document.getElementById('dictionary-data').textContent);
+    const dictionaryInfo = JSON.parse(document.getElementById('dictionary-info').textContent);
+    var dictionaryData;
+    var rowSocket;
+    var catSocket;
 </script>
 {% endblock %}
 
@@ -53,6 +56,11 @@
 {% endblock %}
 
 {% block body %}
+<div id="loading-dictionary-popup">
+    <div id="loading-dictionary-text-wrapper">
+        <span>Loading dictionary...</span>
+    </div>
+</div>
 <table id="hub-table">
     <thead class="grid-elem de">
         <th></th>
