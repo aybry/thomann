@@ -30,7 +30,7 @@ class Dictionary {
     }
 
     destroy() {
-        $("#hub-table").html("");
+        $("#hub-table > tbody").remove();
     }
 
     showLoading() {
