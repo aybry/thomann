@@ -53,7 +53,7 @@ class CategoryConsumer(HubConsumer):
         cat_srl = CategoryBarebonesSerialiser(category)
         LOGGER.debug(cat_srl.data)
 
-        await self.send_response("read", cat_srl.data)
+        await self.send_response("read", cat_srl.data, to_group=False)
 
     async def insert(self, cat_data):
         LOGGER.debug("Inserting category")
