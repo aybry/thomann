@@ -1,35 +1,39 @@
-var catSocket;
-
 
 function startCatSocket() {
     var wsURL = socketType + "://"
         + window.location.hostname
         + portNumber
         + "/ws/category/"
-        + dictionaryData.slug;
+        + dictionaryInfo.slug;
 
     catSocket = new WebSocket(wsURL);
 
     catSocket.onopen = function() {
+        try {
+            if (rowSocket.readyState === WebSocket.OPEN) {
+                dictionary = null;
+                dictionary = new Dictionary();
+                dictionary.initialise();
+                setSocketConnectedButton(true);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+
         console.log("catSocket is connected");
-        $("#socket-status").parent().children("span").text("Connected");
-        $("#socket-status")
-            .removeClass("fa-unlink")
-            .addClass("fa-link");
-        $("#socket-status")
-            .removeClass("disconnected")
-            .addClass("connected");
     }
 
     catSocket.onclose = function() {
-        catSocket = null;
-        $("#socket-status").parent().children("span").text("Disconnected");
-        $("#socket-status")
-            .removeClass("fa-link")
-            .addClass("fa-unlink");
-        $("#socket-status")
-            .removeClass("connected")
-            .addClass("disconnected");
+        // catSocket = null;
+
+        try {
+            if (rowSocket.readyState === WebSocket.CLOSED) {
+                dictionary.showLoading();
+                setSocketConnectedButton(false);
+            }
+        } catch(err) {
+            console.log(err);
+        }
 
         console.error("catSocket closed unexpectedly. Retrying...");
         console.log("Trying to connect...")

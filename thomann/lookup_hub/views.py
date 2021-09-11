@@ -21,30 +21,46 @@ class HomeView(TemplateView):
 class DictionaryView(LoginRequiredMixin, TemplateView):
     template_name = "lookup_hub/dictionary.html"
 
-    def get_context_data(self, slug, **kwargs):
+    def get_context_data(self, slug, **_):
         dictionary = models.Dictionary.objects.get(slug=slug)
-        dictionary_srl = serialisers.DictionarySerialiser(dictionary)
+        dictionary_barebones_srl = serialisers.DictionaryBarebonesSerialiser(dictionary)
 
         return {
-            "dictionary": dictionary,
-            "dictionary_data": dictionary_srl.data,
+            "dictionary": dictionary_barebones_srl.data,
             "show_socket_button": True,
             "show_backup_button": True,
         }
 
 
+class DictionaryDataView(LoginRequiredMixin, View):
+
+    def get(self, _request, slug, **_):
+        dictionary = models.Dictionary.objects.get(slug=slug)
+        dictionary_srl = serialisers.DictionarySerialiser(dictionary)
+
+        return JsonResponse(dictionary_srl.data)
+
+
 class SandboxView(TemplateView):
     template_name = "lookup_hub/dictionary.html"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **_):
         sandbox_dictionary = models.Dictionary.objects.get(slug="sandbox")
-        dictionary_srl = serialisers.DictionarySerialiser(sandbox_dictionary)
+        sandbox_barebones_srl = serialisers.DictionaryBarebonesSerialiser(sandbox_dictionary)
 
         return {
-            "dictionary": sandbox_dictionary,
-            "dictionary_data": dictionary_srl.data,
+            "dictionary": sandbox_barebones_srl.data,
             "show_socket_button": True,
         }
+
+
+class SandboxDataView(View):
+
+    def get(self, _request, **_):
+        dictionary = models.Dictionary.objects.get(slug="sandbox")
+        dictionary_srl = serialisers.DictionarySerialiser(dictionary)
+
+        return JsonResponse(dictionary_srl.data)
 
 
 class GetBackupView(LoginRequiredMixin, View):

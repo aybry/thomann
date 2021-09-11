@@ -1,3 +1,5 @@
+import ast
+
 from .base import *
 
 
@@ -7,9 +9,8 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 
-ALLOWED_HOSTS = [
-    "lookup.ay-bryson.com",
-]
+ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS")
+ALLOWED_HOSTS = ast.literal_eval(ALLOWED_HOSTS_ENV)
 
 
 STATIC_ROOT = "/usr/src/app/staticfiles"

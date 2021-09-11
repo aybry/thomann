@@ -42,9 +42,10 @@ a:link:hover > i {
 }
 
 #grid-body {
+    position: relative;
     grid-column: 2 / 3;
     height: 100%;
-    box-shadow: 0 0 20px 16px rgb(136, 136, 136);
+    box-shadow: 0 0 8px 8px rgb(180, 180, 180);
 }
 
 #grid-body > header {

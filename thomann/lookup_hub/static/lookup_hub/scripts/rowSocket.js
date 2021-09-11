@@ -1,30 +1,40 @@
-var rowSocket;
-var currentEntry;
-
 
 function startRowSocket() {
     var wsURL = socketType + "://"
         + window.location.hostname
         + portNumber
         + "/ws/row/"
-        + dictionaryData.slug;
+        + dictionaryInfo.slug;
 
     rowSocket = new WebSocket(wsURL);
 
     rowSocket.onopen = function() {
-        console.log("rowSocket is connected")
-        $("#socket-status").parent().children("span").text("Connected");
-        $("#socket-status")
-            .removeClass("disconnected")
-            .addClass("connected");
+        console.log("rowSocket is connected");
+
+        try {
+            if (catSocket.readyState === WebSocket.OPEN) {
+                dictionary = null;
+                dictionary = new Dictionary();
+                dictionary.initialise();
+                setSocketConnectedButton(true);
+            }
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     rowSocket.onclose = function() {
-        rowSocket = null;
-        $("#socket-status").parent().children("span").text("Disconnected");
-        $("#socket-status")
-            .removeClass("connected")
-            .addClass("disconnected");
+        // rowSocket = null;
+
+        try {
+            if (catSocket.readyState === WebSocket.CLOSED) {
+                dictionary.showLoading();
+                setSocketConnectedButton(false);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+
         console.error("rowSocket closed unexpectedly. Retrying...");
 
         console.log("Trying to connect...")

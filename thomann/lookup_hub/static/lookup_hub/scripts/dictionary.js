@@ -1,5 +1,7 @@
 var dictionary;
-
+const dictionaryApiUrl = window.location.origin
+    + "/api/dictionary_data/"
+    + dictionaryInfo.slug;
 
 class Dictionary {
     constructor() {
@@ -7,73 +9,42 @@ class Dictionary {
     }
 
     initialise() {
-        for (var cat of dictionaryData["category_set"]) {
-            var category = new Category(cat);
-            this.appendCategory(category);
-        }
+        fetch(dictionaryApiUrl).then(response => {
+            console.log("Fetching dictionary...")
+
+            if (response.status !== 200) {
+                console.log("Dictionary fetch error")
+                return
+            }
+
+            this.destroy();
+            response.json().then(dictionaryData => {
+                for (var cat of dictionaryData["category_set"]) {
+                    var category = new Category(cat);
+                    this.appendCategory(category);
+                }
+                this.hideLoading();
+            });
+            console.log("Dictionary fetched!")
+        })
+    }
+
+    destroy() {
+        $("#hub-table > tbody").remove();
+    }
+
+    showLoading() {
+        $("#loading-dictionary-popup").show();
+    }
+
+    hideLoading() {
+        $("#loading-dictionary-popup").hide();
     }
 
     appendCategory(category) {
-        // this.categories.push(category);
         var tbody = category.makeTbodyJQ();
         $("#hub-table").append(tbody);
     }
-
-
-    // insertDataByID(id, entry) {
-    //     var index = this.ids.indexOf(id);
-    //     this.insertDataByIndex(index, entry);
-
-    //     this.displayRowByID(id, entry);
-    // }
-
-    // insertDataByIndex(index, entry) {
-    //     this.entries.splice(index, 0, entry);
-    //     this.ids.splice(index, 0, entry.id);
-    // }
-
-    // displayRowByID(id, entry) {
-    //     $(entry.html).insertBefore($("[data-row-id='" + id + "']")[0]);
-    // }
-
-    // displayRowByIndex(entry, index) {
-    //     var id = this.ids[index];
-    //     this.displayRowByID(entry, id);
-    // }
-
-    // remove(entryID) {
-    //     var index = this.ids.indexOf(entryID);
-
-    //     this.ids.splice(index, 1);
-    //     this.entries.splice(index, 1);
-
-    //     $("[data-row-id='" + entryID + "']").remove();
-    // }
-
-    undo() {
-        if (
-            lastDeleteNeighbourIDs().length > 0 &&
-            lastDeleted().length > 0 &&
-            lastDeleteNeighbourIDs().length == lastDeleted().length
-        ) {
-            sockAddRowID(popFromSession("lastDeleteNeighbourIDs"), popFromSession("lastDeleted"));
-        }
-
-        if (
-            lastDeleteNeighbourIDs().length == 0 &
-            lastDeleted().length == 0
-        ) {
-            $("#undo-button").prop("disabled", true);
-        }
-    }
-
-    // replace(entry) {
-    //     var index = this.ids.indexOf(entry.id);
-    //     this.entries[index] = entry;
-
-    //     $(".hub-entry[data-row-id='" + entry.id + "']").remove();
-    //     $(dictionaryElemsHTML(entry)).insertAfter($("tr[data-row-id='" + entry.id + "']").children()[1]);
-    // }
 }
 
 
@@ -216,6 +187,27 @@ class Row {
 }
 
 
+function setSocketConnectedButton(isConnected) {
+    if (isConnected) {
+        $("#socket-status").parent().children("span").text("Connected");
+        $("#socket-status")
+            .removeClass("fa-unlink")
+            .addClass("fa-link");
+        $("#socket-status")
+            .removeClass("disconnected")
+            .addClass("connected");
+    } else {
+        $("#socket-status").parent().children("span").text("Connected");
+        $("#socket-status")
+            .removeClass("fa-unlink")
+            .addClass("fa-link");
+        $("#socket-status")
+            .removeClass("disconnected")
+            .addClass("connected");
+    }
+}
+
+
 var escape = document.createElement('textarea');
 function escapeHTML(html) {
     escape.textContent = html;
@@ -326,9 +318,6 @@ $(document).keydown(function(event) {
 
 
 $(document).ready( function() {
-
-    dictionary = new Dictionary();
-    dictionary.initialise();
 
     $("#popup-container").on("click", function(event) {
         if (event.target == $("#popup-container")[0]) {
