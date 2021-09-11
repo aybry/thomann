@@ -10,12 +10,12 @@ services:
 
   wsgi:
     container_name: thomann_wsgi
-    image: ghcr.io/aybry/thomann/thomann:latest
+    image: ghcr.io/aybry/thomann/thomann:2021-09-11
     command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate --noinput && gunicorn thomann.wsgi:application -b 0.0.0.0:8001"
     expose:
       - 8001
     volumes:
-      - ~/tlh_backups:/home/backups
+      - ~/tlh_backups:/app/backups
       - static_volume:/usr/src/app/staticfiles
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
@@ -30,7 +30,7 @@ services:
 
   asgi:
     container_name: thomann_asgi
-    image: ghcr.io/aybry/thomann/thomann:latest
+    image: ghcr.io/aybry/thomann/thomann:2021-09-11
     expose:
       - 8080
     command: daphne -e ssl:8080:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
