@@ -2,81 +2,61 @@ version: "3.9"
 
 services:
 
+  traefik:
+    container_name: thomann_traefik
+    build:
+      context: .
+      dockerfile: traefik/Dockerfile
+    ports:
+      - 8080:8080
+      - 80:80
+      - 443:443
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik-public-certificates:/certificates"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`lookup-dev-traefik.ay-bryson.com`)"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:%{TRAEFIK_PASSWORD}"
+
+  app:
+    container_name: thomann_app
+    image: ghcr.io/aybry/thomann/thomann:2021-09-11
+    # build: .
+    expose:
+      - 8080
+    command: bash -c "python manage.py migrate --no-input && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8080 thomann.asgi:application"
+    volumes:
+      - static_volume:/app/staticfiles
+      - ./thomann/:/app
+      - ~/logs:/app/logs
+    environment:
+      - DJANGO_SETTINGS_MODULE=thomann.settings.prod
+      - THOMANN_DB_HOST=${DBHOST}
+      - THOMANN_DB_PORT=${DBPORT}
+      - THOMANN_DB_NAME=${DBNAME}
+      - THOMANN_DB_SCHEMA=${DBSCHEMA}
+      - THOMANN_DB_USERNAME=${DBUNAME}
+      - THOMANN_DB_PASSWORD=${DBPASS}
+      - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.asgi.rule=Host(`lookup-dev.ay-bryson.com`)"
+      - "traefik.http.routers.asgi.tls=true"
+      - "traefik.http.routers.asgi.tls.certresolver=letsencrypt"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.asgi.middlewares=sslheader@docker"
+
   redis:
     container_name: thomann_redis
     image: redis
     ports:
       - "6379:6379"
-
-  wsgi:
-    container_name: thomann_wsgi
-    image: ghcr.io/aybry/thomann/thomann:2021-09-11
-    command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate --noinput && gunicorn thomann.wsgi:application -b 0.0.0.0:8001"
-    expose:
-      - 8001
-    volumes:
-      - ~/tlh_backups:/app/backups
-      - static_volume:/usr/src/app/staticfiles
-    environment:
-      - DJANGO_SETTINGS_MODULE=thomann.settings.prod
-      - THOMANN_DB_HOST=${DBHOST}
-      - THOMANN_DB_PORT=${DBPORT}
-      - THOMANN_DB_NAME=${DBNAME}
-      - THOMANN_DB_SCHEMA=${DBSCHEMA}
-      - THOMANN_DB_USERNAME=${DBUNAME}
-      - THOMANN_DB_PASSWORD=${DBPASS}
-      - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-
-  asgi:
-    container_name: thomann_asgi
-    image: ghcr.io/aybry/thomann/thomann:2021-09-11
-    expose:
-      - 8080
-    command: daphne -e ssl:8080:privateKey=/etc/letsencrypt/live/lookup.ay-bryson.com/privkey.pem:certKey=/etc/letsencrypt/live/lookup.ay-bryson.com/cert.pem thomann.asgi:application
-    volumes:
-      - static_volume:/usr/src/app/staticfiles
-      - ./thomann/:/usr/src/app
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    ports:
-      - "8080:8080"
-    environment:
-      - DJANGO_SETTINGS_MODULE=thomann.settings.prod
-      - THOMANN_DB_HOST=${DBHOST}
-      - THOMANN_DB_PORT=${DBPORT}
-      - THOMANN_DB_NAME=${DBNAME}
-      - THOMANN_DB_SCHEMA=${DBSCHEMA}
-      - THOMANN_DB_USERNAME=${DBUNAME}
-      - THOMANN_DB_PASSWORD=${DBPASS}
-      - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-
-  nginx:
-    container_name: thomann_nginx
-    image: nginx
-    build:
-      context: ./nginx
-      network: host
-    ports:
-      - "80:80"
-      - "443:443"
-    restart: always
-    depends_on:
-      - asgi
-    volumes:
-      - static_volume:/usr/src/app/staticfiles
-      - ./nginx:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-
-  certbot:
-    container_name: thomann_certbot
-    image: certbot/certbot
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
   static_volume:

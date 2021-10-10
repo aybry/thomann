@@ -13,7 +13,7 @@ ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS")
 ALLOWED_HOSTS = ast.literal_eval(ALLOWED_HOSTS_ENV)
 
 
-STATIC_ROOT = "/usr/src/app/staticfiles"
+STATIC_ROOT = "/app/staticfiles"
 
 
 REDIS_HOSTNAME = "redis"
