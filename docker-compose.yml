@@ -16,16 +16,16 @@ services:
       - "./traefik-public-certificates:/certificates"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`lookup-dev-traefik.ay-bryson.com`)"
+      - "traefik.http.routers.dashboard.rule=Host(`lookup-traefik.ay-bryson.com`)"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:%{TRAEFIK_PASSWORD}"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD}"
 
   app:
     container_name: thomann_app
-    image: ghcr.io/aybry/thomann/thomann:2021-09-11
+    image: ghcr.io/aybry/thomann/thomann:2021-10-10
     expose:
       - 8080
     command: bash -c "python manage.py migrate --no-input && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8080 thomann.asgi:application"
@@ -34,6 +34,8 @@ services:
       - ./thomann/:/app
       - ~/tlh_backups:/app/backups
       - ~/logs:/app/logs
+    networks:
+      - default
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
       - THOMANN_DB_HOST=${DBHOST}
@@ -46,7 +48,7 @@ services:
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.asgi.rule=Host(`lookup-dev.ay-bryson.com`)"
+      - "traefik.http.routers.asgi.rule=Host(`lookup.ay-bryson.com`)"
       - "traefik.http.routers.asgi.tls=true"
       - "traefik.http.routers.asgi.tls.certresolver=letsencrypt"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
@@ -61,3 +63,7 @@ services:
 volumes:
   static_volume:
 
+networks:
+  default:
+    external:
+      name: thomann_network
