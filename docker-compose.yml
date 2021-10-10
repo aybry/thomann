@@ -26,7 +26,6 @@ services:
   app:
     container_name: thomann_app
     image: ghcr.io/aybry/thomann/thomann:2021-09-11
-    # build: .
     expose:
       - 8080
     command: bash -c "python manage.py migrate --no-input && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8080 thomann.asgi:application"
