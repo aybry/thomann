@@ -33,6 +33,7 @@ services:
     volumes:
       - static_volume:/app/staticfiles
       - ./thomann/:/app
+      - ~/tlh_backups:/app/backups
       - ~/logs:/app/logs
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
