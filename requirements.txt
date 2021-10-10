@@ -5,4 +5,5 @@ django-ordered-model
 djangorestframework
 fontawesomefree
 psycopg2-binary
+pytest
 whitenoise
