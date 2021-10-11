@@ -8,12 +8,14 @@ services:
       context: .
       dockerfile: traefik/Dockerfile
     ports:
-      - 8080:8080
+      - 7999:7999
       - 80:80
       - 443:443
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik-public-certificates:/certificates"
+    networks:
+      - default
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dashboard.rule=Host(`lookup-traefik.ay-bryson.com`)"
@@ -25,17 +27,13 @@ services:
 
   app:
     container_name: thomann_app
-    image: ghcr.io/aybry/thomann/thomann:2021-10-10
+    depends_on:
+      - redis
+    image: ghcr.io/aybry/thomann/thomann:2021-10-11
+    # build: .
+    command: bash -c "python manage.py migrate --no-input && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 7999 thomann.asgi:application"
     expose:
-      - 8080
-    command: bash -c "python manage.py migrate --no-input && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8080 thomann.asgi:application"
-    volumes:
-      - static_volume:/app/staticfiles
-      - ./thomann/:/app
-      - ~/tlh_backups:/app/backups
-      - ~/logs:/app/logs
-    networks:
-      - default
+      - 7999
     environment:
       - DJANGO_SETTINGS_MODULE=thomann.settings.prod
       - THOMANN_DB_HOST=${DBHOST}
@@ -46,6 +44,10 @@ services:
       - THOMANN_DB_PASSWORD=${DBPASS}
       - THOMANN_SECRET_KEY=${THOMANN_SECRET_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - ~/tlh_backups:/app/backups
+      - ~/logs:/app/logs
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.asgi.rule=Host(`lookup.ay-bryson.com`)"
@@ -58,7 +60,7 @@ services:
     container_name: thomann_redis
     image: redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
 volumes:
   static_volume:

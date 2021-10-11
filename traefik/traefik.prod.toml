@@ -11,16 +11,19 @@
     address = ":443"
 
   [entryPoints.websocket_secure]
-    address = ":8080"
+    address = ":7999"
 
 [accessLog]
 
 [api]
-dashboard = true
+  dashboard = true
+  insecure = false
 
 [providers]
   [providers.docker]
     exposedByDefault = false
+    watch = true
+    network = "thomann_network"
 
 [certificatesResolvers.letsencrypt.acme]
   email = "samuel@ay-bryson.com"

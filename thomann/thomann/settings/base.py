@@ -119,6 +119,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
             "format": "{asctime} - {name} - {levelname} - {message}",
@@ -142,7 +143,7 @@ LOGGING = {
         "lookup_hub": {
             "handlers": ["console", "file"],
             "propagate": True,
-            "level": os.getenv("DEBUG_LEVEL", "INFO"),
+            "level": os.getenv("LOG_LEVEL", "INFO"),
         },
     }
 }

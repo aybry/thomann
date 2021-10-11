@@ -7,3 +7,4 @@ logs/
 init-letsencrypt.sh
 thomann/htmlcov/
 thomann/.coverage
+traefik-public-certificates/acme.json
